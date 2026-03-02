@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tgl-api/TheGildedLibrary.tgl-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tgl-api/TheGildedLibrary.tgl-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tgl-core/TheGildedLibrary.tgl-core.testPlugin.iml" filepath="$PROJECT_DIR$/.idea/modules/tgl-core/TheGildedLibrary.tgl-core.testPlugin.iml" />
+    </modules>
+  </component>
+</project>

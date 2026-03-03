@@ -9,4 +9,11 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "25"
+        targetCompatibility = "25"
+    }
+
+
 }

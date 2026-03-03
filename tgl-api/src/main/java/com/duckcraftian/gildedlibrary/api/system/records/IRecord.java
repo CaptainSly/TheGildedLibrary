@@ -1,4 +1,4 @@
-package com.duckcraftian.gildedlibrary.api.system;
+package com.duckcraftian.gildedlibrary.api.system.records;
 
 import java.util.Optional;
 

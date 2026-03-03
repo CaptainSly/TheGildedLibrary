@@ -4,6 +4,7 @@ import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
 import com.duckcraftian.gildedlibrary.api.system.registries.Registry;
+import com.duckcraftian.gildedlibrary.core.HoloTapeRecord;
 
 import static com.duckcraftian.gildedlibrary.core.TestPlugin.MOD_ID;
 

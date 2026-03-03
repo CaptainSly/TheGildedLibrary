@@ -1,6 +1,7 @@
-package com.duckcraftian.gildedlibrary.api.system;
+package com.duckcraftian.gildedlibrary.api.system.records;
 
 import com.duckcraftian.gildedlibrary.api.assets.AbstractAsset;
+import com.duckcraftian.gildedlibrary.api.system.Builder;
 
 import java.util.Optional;
 

@@ -1,11 +1,11 @@
 package com.duckcraftian.gildedlibrary.core.system.mods;
 
 import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadata;
+import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadataReader;
 import com.duckcraftian.gildedlibrary.core.TGL;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,7 +30,7 @@ public class ModTest {
                 .build();
 
         File metadataFile = new File("build/" + metadata.getId() + ".glmetadata");
-        ModMetadataWriter writer = new ModMetadataWriter();
+        com.duckcraftian.gildedlibrary.api.system.mods.ModMetadataWriter writer = new com.duckcraftian.gildedlibrary.api.system.mods.ModMetadataWriter();
         ModMetadataReader reader = new ModMetadataReader();
 
         writer.write(metadata, metadataFile.toPath());

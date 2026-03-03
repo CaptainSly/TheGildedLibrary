@@ -1,6 +1,4 @@
-package com.duckcraftian.gildedlibrary.core.system.mods;
-
-import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadata;
+package com.duckcraftian.gildedlibrary.api.system.mods;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

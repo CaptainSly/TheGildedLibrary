@@ -1,7 +1,5 @@
 package com.duckcraftian.gildedlibrary.api.system.records;
 
-import com.duckcraftian.gildedlibrary.api.system.AbstractRecord;
-
 public abstract class AbstractWeapon extends AbstractItem {
 
     private final String weaponType;

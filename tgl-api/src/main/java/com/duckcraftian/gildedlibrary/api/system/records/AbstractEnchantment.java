@@ -1,6 +1,5 @@
 package com.duckcraftian.gildedlibrary.api.system.records;
 
-import com.duckcraftian.gildedlibrary.api.system.AbstractRecord;
 import com.duckcraftian.gildedlibrary.api.system.Builder;
 
 public abstract class AbstractEnchantment extends AbstractRecord {

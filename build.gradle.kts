@@ -3,6 +3,7 @@ plugins {
 }
 
 allprojects {
+
     group = "com.reignleif.tgl"
     version = "0.1.0"
 
@@ -10,10 +11,17 @@ allprojects {
         mavenCentral()
     }
 
-    tasks.withType<JavaCompile> {
-        sourceCompatibility = "25"
-        targetCompatibility = "25"
-    }
+}
 
+subprojects {
+    apply(plugin = "java")
+
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.GRAAL_VM
+        }
+    }
 
 }

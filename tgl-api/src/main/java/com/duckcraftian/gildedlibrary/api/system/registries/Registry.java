@@ -1,6 +1,6 @@
 package com.duckcraftian.gildedlibrary.api.system.registries;
 
-import com.duckcraftian.gildedlibrary.api.system.AbstractRecord;
+import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
 
 import java.util.Collections;
 import java.util.HashMap;

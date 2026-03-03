@@ -1,7 +1,7 @@
 package com.duckcraftian.gildedlibrary.core;
 
-import com.duckcraftian.gildedlibrary.api.system.AbstractRecord;
 import com.duckcraftian.gildedlibrary.api.system.Builder;
+import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
 
 public class HoloTapeRecord extends AbstractRecord {
 

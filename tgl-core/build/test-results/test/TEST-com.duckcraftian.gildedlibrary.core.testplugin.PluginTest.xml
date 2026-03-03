@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-02T11:14:23.318Z" hostname="Nitro-AN515-54" time="0.051">
+<testsuite name="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-03T10:27:03.882Z" hostname="Nitro-AN515-54" time="0.05">
   <properties/>
-  <testcase name="testCustomRecordCreationAndInsertion()" classname="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" time="0.036"/>
+  <testcase name="testCustomRecordCreationAndInsertion()" classname="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" time="0.035"/>
   <testcase name="testPluginLoads()" classname="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" time="0.007"/>
   <testcase name="testCustomRegistryCreation()" classname="com.duckcraftian.gildedlibrary.core.testplugin.PluginTest" time="0.006"/>
   <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
+  <system-err><![CDATA[Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
 INFO: Discovered Plugin: Test Plugin v1.0.0
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
 INFO: TAPE: test_plugin:holotape:test_tape
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
 INFO: Loaded plugin: Test Plugin v1.0.0
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
 INFO: Discovered Plugin: Test Plugin v1.0.0
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
 INFO: TAPE: test_plugin:holotape:test_tape
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
 INFO: Loaded plugin: Test Plugin v1.0.0
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader tryLoadPluginClass
 INFO: Discovered Plugin: Test Plugin v1.0.0
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.TestPlugin onInitialize
 INFO: TAPE: test_plugin:holotape:test_tape
-Mar 02, 2026 5:14:23 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
+Mar 03, 2026 4:27:03 AM com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader loadPlugins
 INFO: Loaded plugin: Test Plugin v1.0.0
 ]]></system-err>
 </testsuite>

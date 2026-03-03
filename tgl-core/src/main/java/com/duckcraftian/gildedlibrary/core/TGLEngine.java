@@ -23,7 +23,7 @@ public class TGLEngine implements IDisposable {
     public TGLEngine(EngineBuilder builder) {
         this.engineMode = builder.engineMode;
         this.registryManager = new RegistryManager();
-        this.pluginLoader = new PluginLoader(null, registryManager);
+//        this.pluginLoader = new PluginLoader(null, registryManager);
     }
 
     public void run() {
@@ -49,12 +49,12 @@ public class TGLEngine implements IDisposable {
         // Initialize Render Backend
 
         // Initialize Plugin Loader
-        pluginLoader.loadPlugins();
+//        pluginLoader.loadPlugins();
 
         // Initialize Mod Loader
 
         // Post Initialize Plugin Loader
-        pluginLoader.postInitializePlugins();
+//        pluginLoader.postInitializePlugins();
 
     }
 

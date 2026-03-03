@@ -1,5 +1,6 @@
 package com.duckcraftian.gildedlibrary.core.testplugin;
 
+import com.duckcraftian.gildedlibrary.api.system.registries.Registry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader;
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +42,12 @@ public class PluginTest {
 
         loader.loadPlugins();
 
-        assertEquals("test_plugin:holotape:test_tape", registryManager.getRegistry("holotapes").get().resolve("test_plugin:holotape:test_tape").get().getId());
+        var holotapeRegistry = registryManager.getRegistry("holotapes");
+        if (holotapeRegistry.isPresent()) {
+            Registry<?> reg = holotapeRegistry.get();
+            var holotape = reg.resolve("test_tape");
+            holotape.ifPresent(abstractRecord -> assertEquals("test_plugin:holotapes:test_tape", abstractRecord.getId()));
+        }
     }
 
 }

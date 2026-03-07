@@ -75,6 +75,14 @@ public class PluginLoader {
         }
     }
 
+    public void disposePlugins() {
+        for (String pluginId : loadOrder) {
+            IPlugin plugin = loadedPlugins.get(pluginId);
+            plugin.onDispose();
+            logger.info("Disposed Plugin: " + pluginId);
+        }
+    }
+
     private void loadJar(Path jarPath) {
         try {
             URLClassLoader classLoader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, getClass().getClassLoader());
@@ -181,4 +189,5 @@ public class PluginLoader {
     public Logger getLogger() {
         return logger;
     }
+
 }

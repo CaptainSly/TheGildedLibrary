@@ -5,6 +5,7 @@ public abstract class AbstractSkill extends AbstractRecord {
     private final String name;
     private final String description;
 
+
     protected AbstractSkill(AbstractSkillBuilder<?> builder) {
         super(builder);
         this.name = builder.name;

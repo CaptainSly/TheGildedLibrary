@@ -19,8 +19,8 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-renderdoc")
     implementation("org.lwjgl", "lwjgl-sdl")
     implementation("org.lwjgl", "lwjgl-meshoptimizer")
-//    implementation("org.lwjgl", "lwjgl-vma")
-//    implementation("org.lwjgl", "lwjgl-vulkan")
+    implementation("org.lwjgl", "lwjgl-vma")
+    implementation("org.lwjgl", "lwjgl-vulkan")
     implementation("org.lwjgl", "lwjgl", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-assimp", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-openal", classifier = lwjglNatives)
@@ -29,7 +29,7 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-zstd", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-meshoptimizer", classifier = lwjglNatives)
-//    implementation ("org.lwjgl", "lwjgl-vma", classifier = lwjglNatives)
+    implementation ("org.lwjgl", "lwjgl-vma", classifier = lwjglNatives)
 
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")

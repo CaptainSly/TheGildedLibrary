@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.duckcraftian.gildedlibrary.core.system.mods.ModTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-03-03T10:27:03.862Z" hostname="Nitro-AN515-54" time="0.006">
-  <properties/>
-  <testcase name="testMetadataReadAndWrite()" classname="com.duckcraftian.gildedlibrary.core.system.mods.ModTest" time="0.006"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -2,6 +2,13 @@ package com.duckcraftian.gildedlibrary.api.assets;
 
 import com.duckcraftian.gildedlibrary.api.system.Builder;
 
+/**
+ * Defines the Contract for an AbstractAsset. Any type of asset consumed by the engine uses this as a base class</p>
+ * </p>
+ * i.e, Textures, Meshes, Models, Sounds, Scripts, etc.,
+ *</p>
+ * If you want to create a custom asset, you can use the <code>AssetType.OTHER</code> value for the type.
+ */
 public abstract class AbstractAsset implements IAsset {
 
     private final String id;

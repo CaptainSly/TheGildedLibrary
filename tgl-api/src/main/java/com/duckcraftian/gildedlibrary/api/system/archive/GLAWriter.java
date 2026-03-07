@@ -99,6 +99,7 @@ public class GLAWriter {
 
             // Write Index Table
             for (GLAEntry entry : entries) {
+                IO.println("Writing file: " + entry);
                 out.writeUTF(entry.path());
                 out.writeLong(entry.offset());
                 out.writeInt(entry.compressedSize());

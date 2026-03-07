@@ -9,5 +9,5 @@ public interface IVFS {
     Optional<InputStream> resolve(String path);
     boolean exists(String path);
     List<String> listFiles(String directory);
-
+    List<String> listFilesRecursive(String directory);
 }

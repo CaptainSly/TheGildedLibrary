@@ -4,7 +4,6 @@ import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
 import com.duckcraftian.gildedlibrary.api.system.registries.Registry;
-import com.duckcraftian.gildedlibrary.core.HoloTapeRecord;
 
 import static com.duckcraftian.gildedlibrary.core.TestPlugin.MOD_ID;
 
@@ -22,22 +21,21 @@ public class TestPlugin implements IPlugin {
 
     @Override
     public void onInitialize(PluginContext context) {
-        context.registryManager().addRegistry("holotapes", new Registry<HoloTapeRecord>());
 
-        HoloTapeRecord testTape = new HoloTapeRecord.HoloTapeBuilder()
+        context.registryManager().addRegistry("holotapes", new Registry<HolotapeRecord>());
+        HolotapeRecord testTape = new HolotapeRecord.HolotapeBuilder()
                 .modId(MOD_ID)
                 .itemId("test_tape")
-                .editorId("test_tape")
                 .build();
 
-        context.logger().info("TAPE: " + testTape.getId());
+        Registry<HolotapeRecord> holotapeReg = (Registry<HolotapeRecord>) context.registryManager().getRegistry("holotapes").get();
+        holotapeReg.addRecord(testTape);
 
-        Registry<HoloTapeRecord> registry = (Registry<HoloTapeRecord>) context.registryManager().getRegistry("holotapes").get();
-        registry.addRecord(testTape);
+        initialized = true;
     }
 
     public void onPostInitialize() {
-        
+
     }
 
     @Override

@@ -22,25 +22,7 @@ public class PluginTest {
         loader.loadPlugins();
 
         assertTrue(loader.getLoadedPlugins().containsKey("test_plugin"));
-    }
-
-    @Test
-    void testCustomRegistryCreation() {
-        Path pluginDir = Path.of(System.getProperty("user.dir"), "build", "testPlugins");
-        RegistryManager registryManager = new RegistryManager();
-        PluginLoader loader = new PluginLoader(pluginDir, registryManager);
-
-        loader.loadPlugins();
         assertTrue(registryManager.containsRegistry("holotapes"));
-    }
-
-    @Test
-    void testCustomRecordCreationAndInsertion() {
-        Path pluginDir = Path.of(System.getProperty("user.dir"), "build", "testPlugins");
-        RegistryManager registryManager = new RegistryManager();
-        PluginLoader loader = new PluginLoader(pluginDir, registryManager);
-
-        loader.loadPlugins();
 
         var holotapeRegistry = registryManager.getRegistry("holotapes");
         if (holotapeRegistry.isPresent()) {

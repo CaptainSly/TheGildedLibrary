@@ -28,7 +28,17 @@ public class LooseFolderMount extends AbstractVFSMount {
     public List<String> listFiles(String directory) {
         Path dirPath = looseFolder.resolve(directory);
         try (Stream<Path> files = Files.list(dirPath)) {
-            return files.map(Path::toString).toList();
+            return files.map(p -> looseFolder.relativize(p).toString()).toList();
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<String> listFilesRecursive(String directory) {
+        Path dirPath = looseFolder.resolve(directory);
+        try (Stream<Path> files = Files.walk(dirPath)) {
+            return files.map(p -> looseFolder.relativize(p).toString()).toList();
         } catch (IOException e) {
             return new ArrayList<>();
         }

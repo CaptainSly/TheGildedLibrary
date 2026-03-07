@@ -16,5 +16,9 @@ Thumbs.db
 # Logs
 *.log
 
+# TGL
+gildedlibrary/
+docs/
+
 # Generated
 *.class

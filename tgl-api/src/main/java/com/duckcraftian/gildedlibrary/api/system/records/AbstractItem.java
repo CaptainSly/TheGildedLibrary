@@ -1,5 +1,9 @@
 package com.duckcraftian.gildedlibrary.api.system.records;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public abstract class AbstractItem extends AbstractRecord {
 
     private final String name;
@@ -11,7 +15,7 @@ public abstract class AbstractItem extends AbstractRecord {
     private final float weight;
     private final float cost;
 
-    protected AbstractItem(AbstractItemBuilder<?> builder) {
+    protected AbstractItem(AbstractItemBuilder<?, ?> builder) {
         super(builder);
         this.name = builder.name;
         this.description = builder.description;
@@ -50,7 +54,18 @@ public abstract class AbstractItem extends AbstractRecord {
         return cost;
     }
 
-    public static abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> extends AbstractRecordBuilder<T> {
+    protected void fillBuilder(AbstractItemBuilder<?, ?> builder) {
+        super.fillBuilder(builder);
+        builder.name(this.name);
+        builder.description(this.description);
+        builder.image(this.image);
+        builder.model(this.model);
+        builder.rarity(this.rarity);
+        builder.weight(this.weight);
+        builder.cost(this.cost);
+    }
+
+    public static abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T, R>, R extends AbstractItem> extends AbstractRecordBuilder<T, R> {
         private String name;
         private String description;
         private String image;
@@ -94,6 +109,42 @@ public abstract class AbstractItem extends AbstractRecord {
             return self();
         }
 
+    }
+
+    public abstract static class AbstractItemSerializer<R extends AbstractItem> extends RecordSerializer<R> {
+
+        @Override
+        public byte[] write(R record) {
+            byte[] recordBytes;
+            try {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bos.write(super.write(record));
+                writeString(bos, record.getName());
+                writeString(bos, record.getDescription());
+                writeString(bos, record.getImage());
+                writeString(bos, record.getModel());
+                writeString(bos, record.getRarity());
+                writeFloat(bos, record.getWeight());
+                writeFloat(bos, record.getCost());
+                recordBytes = bos.toByteArray();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return recordBytes;
+        }
+
+        public void readFields(ByteArrayInputStream bis, AbstractItemBuilder<?, ?> builder) throws IOException {
+            super.readFields(bis, builder);
+            String name = getString(bis);
+            String description = getString(bis);
+            String image = getString(bis);
+            String model = getString(bis);
+            String rarity = getString(bis);
+            Float weight = getFloat(bis);
+            Float cost = getFloat(bis);
+
+            builder.name(name).description(description).image(image).model(model).rarity(rarity).weight(weight).cost(cost);
+        }
     }
 
 }

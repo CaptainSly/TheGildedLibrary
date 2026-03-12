@@ -3,7 +3,8 @@ package com.duckcraftian.gildedlibrary.core;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
-import com.duckcraftian.gildedlibrary.api.system.registries.Registry;
+import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
+import org.tinylog.Logger;
 
 import static com.duckcraftian.gildedlibrary.core.TestPlugin.MOD_ID;
 
@@ -22,15 +23,16 @@ public class TestPlugin implements IPlugin {
     @Override
     public void onInitialize(PluginContext context) {
 
-        context.registryManager().addRegistry("holotapes", new Registry<HolotapeRecord>());
+        context.registryManager().addRecordRegistry("holotapes", new RecordRegistry<HolotapeRecord>("holotapes"));
         HolotapeRecord testTape = new HolotapeRecord.HolotapeBuilder()
                 .modId(MOD_ID)
                 .itemId("test_tape")
                 .build();
 
-        Registry<HolotapeRecord> holotapeReg = (Registry<HolotapeRecord>) context.registryManager().getRegistry("holotapes").get();
+        RecordRegistry<HolotapeRecord> holotapeReg = (RecordRegistry<HolotapeRecord>) context.registryManager().getRecordRegistry("holotapes").get();
         holotapeReg.addRecord(testTape);
 
+        Logger.debug(MOD_ID + " has initialized");
         initialized = true;
     }
 

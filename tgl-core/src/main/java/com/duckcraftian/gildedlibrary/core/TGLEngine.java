@@ -3,7 +3,8 @@ package com.duckcraftian.gildedlibrary.core;
 import com.duckcraftian.gildedlibrary.api.assets.RenderBackend;
 import com.duckcraftian.gildedlibrary.api.system.Builder;
 import com.duckcraftian.gildedlibrary.api.system.IDisposable;
-import com.duckcraftian.gildedlibrary.api.system.registries.Registry;
+import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
+import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.core.system.EngineMode;
 import com.duckcraftian.gildedlibrary.core.system.Game;
@@ -12,7 +13,11 @@ import com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader;
 import com.duckcraftian.gildedlibrary.core.system.records.ItemRecord;
 import com.duckcraftian.gildedlibrary.core.system.records.WeaponRecord;
 import com.duckcraftian.gildedlibrary.core.system.render.GLBackend;
+import com.duckcraftian.gildedlibrary.core.system.vfs.VirtualFileSystem;
 import org.lwjgl.sdl.*;
+import org.tinylog.Logger;
+
+import java.io.IOException;
 
 import static org.lwjgl.sdl.SDLInit.SDL_INIT_VIDEO;
 import static org.lwjgl.sdl.SDLInit.SDL_Init;
@@ -21,6 +26,7 @@ public class TGLEngine implements IDisposable {
 
     private EngineMode engineMode;
     private RegistryManager registryManager;
+    private VirtualFileSystem vfs;
     private PluginLoader pluginLoader;
     private Window window;
 
@@ -39,11 +45,27 @@ public class TGLEngine implements IDisposable {
         this.renderBackend = builder.renderBackend;
 
         this.registryManager = new RegistryManager();
+        this.vfs = new VirtualFileSystem();
         this.game = new Game();
 
         // Create the default registries
-        registryManager.addRegistry("weapons", new Registry<WeaponRecord>());
-        registryManager.addRegistry("item", new Registry<ItemRecord>());
+        registryManager.addRecordRegistry("items", new RecordRegistry<ItemRecord>("items"));
+        registryManager.addRecordRegistry("weapons", new RecordRegistry<WeaponRecord>("weapons"));
+
+        // TODO Replace `AbstractRecord` with the appropriate concrete Record type
+        registryManager.addRecordRegistry("armors", new RecordRegistry<AbstractRecord>("armors"));
+        registryManager.addRecordRegistry("races", new RecordRegistry<AbstractRecord>("races"));
+        registryManager.addRecordRegistry("npcs", new RecordRegistry<AbstractRecord>("npcs"));
+        registryManager.addRecordRegistry("creatures", new RecordRegistry<AbstractRecord>("creatures"));
+        registryManager.addRecordRegistry("quests", new RecordRegistry<AbstractRecord>("quests"));
+        registryManager.addRecordRegistry("dialogue", new RecordRegistry<AbstractRecord>("dialogue"));
+        registryManager.addRecordRegistry("factions", new RecordRegistry<AbstractRecord>("factions"));
+        registryManager.addRecordRegistry("weather", new RecordRegistry<AbstractRecord>("weather"));
+        registryManager.addRecordRegistry("cells", new RecordRegistry<AbstractRecord>("cells"));
+
+        // TODO Add the other Serializers when they're created
+        registryManager.addSerializerRegistry("items", new ItemRecord.ItemSerializer());
+        registryManager.addSerializerRegistry("weapons", new WeaponRecord.WeaponSerializer());
 
         this.pluginLoader = new PluginLoader(TGL.getEngineFolder("plugins"), registryManager);
     }
@@ -120,8 +142,18 @@ public class TGLEngine implements IDisposable {
 
     @Override
     public void onDispose() {
-        IO.println("Disposing");
+        Logger.info("Disposing");
         pluginLoader.disposePlugins();
+
+        // Try and Close the VFS Mounts
+        vfs.getArchiveMounts().forEach(mount -> {
+            try {
+                mount.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         renderBackend.onDispose();
         window.onDispose();
         SDLInit.SDL_Quit();
@@ -153,8 +185,12 @@ public class TGLEngine implements IDisposable {
         }
     }
 
-    public static void main(String[] args) {
-        TGLEngine e = new EngineBuilder().engineMode(EngineMode.GAME).renderBackend(new GLBackend()).build();
+    static void main(String[] args) {
+        TGLEngine e = new EngineBuilder()
+                .engineMode(EngineMode.GAME)
+                .renderBackend(new GLBackend())
+                .build();
+
         e.run();
     }
 

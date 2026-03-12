@@ -15,7 +15,7 @@ public class WeaponRecordTest {
                 .attackPower(10.0f)
                 .build();
 
-        assertEquals("arcanumoria:weapon:sword", sword.getId());
+        assertEquals("arcanumoria:weapons:sword", sword.getId());
         assertEquals("test sword", sword.getName());
         assertEquals(10.0f, sword.getAttackPower());
 
@@ -29,7 +29,7 @@ public class WeaponRecordTest {
                 .name("Silver Key")
                 .build();
 
-        assertEquals("arcanumoria:item:silver_key", key.getId());
+        assertEquals("arcanumoria:items:silver_key", key.getId());
         assertEquals("Silver Key", key.getName());
     }
 

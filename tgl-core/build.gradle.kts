@@ -7,6 +7,7 @@ version = "0.1.0"
 
 val lwjglVersion = "3.4.1"
 val lwjglNatives = "natives-linux"
+val tinylogVersion = "2.7.0"
 
 dependencies {
     implementation(project(":tgl-api"))
@@ -31,6 +32,7 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-meshoptimizer", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-vma", classifier = lwjglNatives)
 
+    implementation("org.tinylog:tinylog-impl:$tinylogVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

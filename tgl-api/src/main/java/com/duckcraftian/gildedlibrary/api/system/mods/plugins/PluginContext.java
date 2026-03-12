@@ -1,9 +1,8 @@
 package com.duckcraftian.gildedlibrary.api.system.mods.plugins;
 
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
+import org.tinylog.Logger;
 
-import java.util.logging.Logger;
-
-public record PluginContext(RegistryManager registryManager, Logger logger, String pluginId) {
+public record PluginContext(RegistryManager registryManager, String pluginId) {
 
 }

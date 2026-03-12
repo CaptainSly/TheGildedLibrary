@@ -1,9 +1,10 @@
 package com.duckcraftian.gildedlibrary.core.system.mods;
 
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
+import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
-import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -12,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class PluginLoader {
@@ -23,7 +23,6 @@ public class PluginLoader {
     private final Map<String, TGLPlugin> pluginMetadata;
     private final Map<String, URLClassLoader> pluginClassLoaders;
     private final List<String> loadOrder;
-    private final Logger logger;
 
     public PluginLoader(Path pluginDirectory, RegistryManager registryManager) {
         this.pluginDirectory = pluginDirectory;
@@ -31,7 +30,6 @@ public class PluginLoader {
         this.loadedPlugins = new HashMap<>();
         this.pluginMetadata = new HashMap<>();
         this.pluginClassLoaders = new HashMap<>();
-        this.logger = Logger.getLogger(PluginLoader.class.getName());
         this.loadOrder = new ArrayList<>();
     }
 
@@ -41,12 +39,12 @@ public class PluginLoader {
         try (Stream<Path> stream = Files.list(pluginDirectory)) {
             jarFiles = new ArrayList<>(stream.filter(p -> p.toString().endsWith(".jar")).toList());
         } catch (IOException e) {
-            logger.severe("Failed to read plugin directory: " + e.getMessage());
+            Logger.error("Failed to read plugin directory: " + e.getMessage());
             return;
         }
 
         if (jarFiles.isEmpty()) {
-            logger.info("No plugins found in: " + pluginDirectory);
+            Logger.info("No plugins found in: " + pluginDirectory);
             return;
         }
 
@@ -57,12 +55,12 @@ public class PluginLoader {
             IPlugin plugin = loadedPlugins.get(pluginId);
             TGLPlugin meta = pluginMetadata.get(pluginId);
 
-            PluginContext context = new PluginContext(registryManager, logger, pluginId);
+            PluginContext context = new PluginContext(registryManager, pluginId);
 
             plugin.onInitialize(context);
             plugin.onEnable();
 
-            logger.info("Loaded plugin: " + meta.name() + " v" + meta.version());
+            Logger.info("Loaded plugin: " + meta.name() + " v" + meta.version());
         }
 
     }
@@ -71,7 +69,7 @@ public class PluginLoader {
         for (String pluginId : loadOrder) {
             IPlugin plugin = loadedPlugins.get(pluginId);
             plugin.onPostInitialize();
-            logger.info("Post Initialized Plugin: " + pluginId);
+            Logger.info("Post Initialized Plugin: " + pluginId);
         }
     }
 
@@ -79,7 +77,7 @@ public class PluginLoader {
         for (String pluginId : loadOrder) {
             IPlugin plugin = loadedPlugins.get(pluginId);
             plugin.onDispose();
-            logger.info("Disposed Plugin: " + pluginId);
+            Logger.info("Disposed Plugin: " + pluginId);
         }
     }
 
@@ -97,12 +95,12 @@ public class PluginLoader {
             }
 
         } catch (IOException e) {
-            logger.severe("Failed to load JAR: " + jarPath + " - " + e.getMessage());
+            Logger.error("Failed to load JAR: " + jarPath + " - " + e.getMessage());
         }
 
     }
 
-    public void tryLoadPluginClass(URLClassLoader classLoader, String className) {
+    private void tryLoadPluginClass(URLClassLoader classLoader, String className) {
         try {
             Class<?> clazz = classLoader.loadClass(className);
 
@@ -110,7 +108,7 @@ public class PluginLoader {
             if (annotation == null) return;
 
             if (!IPlugin.class.isAssignableFrom(clazz)) {
-                logger.warning(className + " has @TGLPlugin but does not implement IPlugin");
+                Logger.warn(className + " has @TGLPlugin but does not implement IPlugin");
                 return;
             }
 
@@ -120,10 +118,10 @@ public class PluginLoader {
             loadedPlugins.put(annotation.id(), plugin);
             pluginClassLoaders.put(annotation.id(), classLoader);
 
-            logger.info("Discovered Plugin: " + annotation.name() + " v" + annotation.version());
+            Logger.info("Discovered Plugin: " + annotation.name() + " v" + annotation.version());
 
         } catch (Exception e) {
-            logger.warning("Failed to load class: " + className + " - " + e.getMessage());
+            Logger.warn("Failed to load class: " + className + " - " + e.getMessage());
         }
     }
 
@@ -184,10 +182,6 @@ public class PluginLoader {
 
     public Map<String, URLClassLoader> getPluginClassLoaders() {
         return pluginClassLoaders;
-    }
-
-    public Logger getLogger() {
-        return logger;
     }
 
 }

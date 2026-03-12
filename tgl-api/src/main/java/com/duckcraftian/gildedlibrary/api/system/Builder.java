@@ -4,8 +4,7 @@ import com.duckcraftian.gildedlibrary.api.assets.AbstractAsset;
 import com.duckcraftian.gildedlibrary.api.assets.AssetType;
 
 /**
- * Abstract base class for type-safe builders using the curiously recurring
- * template pattern (CRTP).
+ * Abstract base class for type-safe builders using the template pattern (CRTP).
  *
  * <p>Concrete builders should extend this class, binding {@code T} to
  * themselves and {@code R} to the type they produce. This ensures that
@@ -26,6 +25,7 @@ import com.duckcraftian.gildedlibrary.api.assets.AssetType;
  *     public WeaponRecord build() { return new WeaponRecord(...); }
  * }
  * }</pre>
+ *
  *
  * @param <T> the concrete builder type (must be the subclass itself)
  * @param <R> the type of object this builder produces

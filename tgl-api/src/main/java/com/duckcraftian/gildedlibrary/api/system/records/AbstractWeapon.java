@@ -1,21 +1,21 @@
 package com.duckcraftian.gildedlibrary.api.system.records;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public abstract class AbstractWeapon extends AbstractItem {
 
     private final String weaponType;
     private final float attackPower;
     private final float speedCost;
-    private final RecordReference<AbstractSkill> requiredSkill;
-    private final RecordReference<AbstractEnchantment>[] enchantments;
     private final float critChance;
 
-    protected AbstractWeapon(AbstractWeaponBuilder<?> builder) {
+    protected AbstractWeapon(AbstractWeaponBuilder<?, ?> builder) {
         super(builder);
         this.weaponType = builder.weaponType;
         this.attackPower = builder.attackPower;
         this.speedCost = builder.speedCost;
-        this.requiredSkill = builder.requiredSkill;
-        this.enchantments = builder.enchantments;
         this.critChance = builder.critChance;
     }
 
@@ -31,24 +31,22 @@ public abstract class AbstractWeapon extends AbstractItem {
         return speedCost;
     }
 
-    public RecordReference<AbstractSkill> getRequiredSkill() {
-        return requiredSkill;
-    }
-
-    public RecordReference<AbstractEnchantment>[] getEnchantments() {
-        return enchantments;
-    }
-
     public float getCritChance() {
         return critChance;
     }
 
-    public static abstract class AbstractWeaponBuilder<T extends AbstractWeaponBuilder<T>> extends AbstractItemBuilder<T> {
+    protected void fillBuilder(AbstractWeaponBuilder<?, ?> builder) {
+        super.fillBuilder(builder);
+        builder.weaponType(this.weaponType);
+        builder.attackPower(this.attackPower);
+        builder.speedCost(this.speedCost);
+        builder.critChance(this.critChance);
+    }
+
+    public static abstract class AbstractWeaponBuilder<T extends AbstractWeaponBuilder<T, R>, R extends AbstractWeapon> extends AbstractItemBuilder<T, R> {
         private String weaponType;
         private float attackPower;
         private float speedCost;
-        private RecordReference<AbstractSkill> requiredSkill;
-        private RecordReference<AbstractEnchantment>[] enchantments;
         private float critChance;
 
         public T weaponType(String weaponType) {
@@ -66,20 +64,41 @@ public abstract class AbstractWeapon extends AbstractItem {
             return self();
         }
 
-        public T requiredSkill(RecordReference<AbstractSkill> requiredSkill) {
-            this.requiredSkill = requiredSkill;
-            return self();
-        }
-
-        @SafeVarargs
-        public final T enchantments(RecordReference<AbstractEnchantment>... enchantments) {
-            this.enchantments = enchantments;
-            return self();
-        }
-
         public T critChance(float critChance) {
             this.critChance = critChance;
             return self();
+        }
+    }
+
+    public static abstract class AbstractWeaponSerializer<R extends AbstractWeapon> extends AbstractItemSerializer<R> {
+        @Override
+        public byte[] write(R record) {
+            byte[] recordBytes;
+            try {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bos.write(super.write(record));
+                writeString(bos, record.getWeaponType());
+                writeFloat(bos, record.getAttackPower());
+                writeFloat(bos, record.getSpeedCost());
+                writeFloat(bos, record.getCritChance());
+                recordBytes = bos.toByteArray();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return recordBytes;
+        }
+
+        protected void readFields(ByteArrayInputStream bis, AbstractWeaponBuilder<?, ?> builder) throws IOException {
+            super.readFields(bis, builder);
+            String weaponType = getString(bis);
+            Float attackPower = getFloat(bis);
+            Float speedCost = getFloat(bis);
+            Float critChance = getFloat(bis);
+            builder
+                    .weaponType(weaponType)
+                    .attackPower(attackPower)
+                    .speedCost(speedCost)
+                    .critChance(critChance);
         }
     }
 

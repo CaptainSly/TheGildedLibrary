@@ -5,12 +5,12 @@ import com.duckcraftian.gildedlibrary.api.system.Builder;
 public class ModMetadata {
 
     public enum ModType {
-        MOD, MASTER, GAME;
+        MOD, BASE, GAME;
 
         public static ModType getType(String type) {
             return switch (type) {
                 case "mod" -> MOD;
-                case "master" -> MASTER;
+                case "base" -> BASE;
                 default -> GAME;
             };
         }

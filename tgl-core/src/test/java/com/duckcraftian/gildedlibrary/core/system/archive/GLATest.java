@@ -368,7 +368,7 @@ Never gonna tell a lie and hurt you
 
         for (int i = 0; i < 5; i++) {
             for (String dir : subDirs) {
-                assertTrue(reader.getIndex().containsKey(dir + "/doc_" + (i + 1) + ".txt"));
+                assertTrue(reader.getAssetIndex().getItem(dir, dir + "/doc_" + (i + 1) + ".txt").isPresent());
             }
         }
 

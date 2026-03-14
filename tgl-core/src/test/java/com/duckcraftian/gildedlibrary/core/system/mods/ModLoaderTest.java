@@ -12,7 +12,6 @@ import com.duckcraftian.gildedlibrary.core.system.vfs.VirtualFileSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,5 +1,6 @@
 package com.duckcraftian.gildedlibrary.core.system.mods;
 
+import com.duckcraftian.gildedlibrary.api.system.mods.CircularDependencyException;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
@@ -33,7 +34,7 @@ public class PluginLoader {
         this.loadOrder = new ArrayList<>();
     }
 
-    public void loadPlugins() {
+    public void loadPlugins() throws CircularDependencyException {
         List<Path> jarFiles;
 
         try (Stream<Path> stream = Files.list(pluginDirectory)) {
@@ -60,6 +61,7 @@ public class PluginLoader {
             plugin.onInitialize(context);
             plugin.onEnable();
 
+            registryManager.getLoadedPlugins().add(meta.id());
             Logger.info("Loaded plugin: " + meta.name() + " v" + meta.version());
         }
 
@@ -125,7 +127,7 @@ public class PluginLoader {
         }
     }
 
-    private void resolveDependencyOrder() {
+    private void resolveDependencyOrder() throws CircularDependencyException {
         List<String> sorted = new ArrayList<>();
         Set<String> visited = new HashSet<>();
         Set<String> inProgress = new HashSet<>();
@@ -139,9 +141,9 @@ public class PluginLoader {
         loadOrder.addAll(sorted);
     }
 
-    private void visit(String pluginId, List<String> sorted, Set<String> visited, Set<String> inProgress) {
+    private void visit(String pluginId, List<String> sorted, Set<String> visited, Set<String> inProgress) throws CircularDependencyException {
         if (inProgress.contains(pluginId)) {
-            throw new RuntimeException("Circular dependency detected involving plugin: " + pluginId);
+            throw new CircularDependencyException("Circular dependency detected involving plugin: " + pluginId);
         }
 
         if (visited.contains(pluginId)) return;
@@ -162,7 +164,6 @@ public class PluginLoader {
         visited.add(pluginId);
         sorted.add(pluginId);
     }
-
 
     public Path getPluginDirectory() {
         return pluginDirectory;

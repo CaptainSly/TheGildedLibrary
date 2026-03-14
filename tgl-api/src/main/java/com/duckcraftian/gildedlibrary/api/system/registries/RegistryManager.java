@@ -2,19 +2,22 @@ package com.duckcraftian.gildedlibrary.api.system.registries;
 
 import com.duckcraftian.gildedlibrary.api.system.serialization.AbstractRecordSerializer;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class RegistryManager {
 
     private final Map<String, RecordRegistry<?>> recordRegistries;
     private final Map<String, AbstractRecordSerializer<?>> serializerRegistries;
 
+    private final List<String> loadedPlugins;
+    private final List<String> loadedMods;
+
     public RegistryManager() {
         recordRegistries = new HashMap<>();
         serializerRegistries = new HashMap<>();
+
+        loadedPlugins = new ArrayList<>();
+        loadedMods = new ArrayList<>();
     }
 
     public void addRecordRegistry(String registryType, RecordRegistry<?> recordRegistry) {
@@ -47,6 +50,14 @@ public class RegistryManager {
 
     public Optional<AbstractRecordSerializer<?>> getSerializerRegistry(String registryType) {
         return Optional.ofNullable(serializerRegistries.get(registryType));
+    }
+
+    public List<String> getLoadedPlugins() {
+        return loadedPlugins;
+    }
+
+    public List<String> getLoadedMods() {
+        return loadedMods;
     }
 
     public Map<String, RecordRegistry<?>> getRecordRegistries() {

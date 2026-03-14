@@ -8,6 +8,7 @@ import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.core.system.EngineMode;
 import com.duckcraftian.gildedlibrary.core.system.Game;
+import com.duckcraftian.gildedlibrary.core.system.mods.ModLoader;
 import com.duckcraftian.gildedlibrary.core.system.render.Window;
 import com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader;
 import com.duckcraftian.gildedlibrary.core.system.records.ItemRecord;
@@ -28,6 +29,7 @@ public class TGLEngine implements IDisposable {
     private RegistryManager registryManager;
     private VirtualFileSystem vfs;
     private PluginLoader pluginLoader;
+    private ModLoader modLoader;
     private Window window;
 
     private RenderBackend renderBackend;
@@ -68,6 +70,7 @@ public class TGLEngine implements IDisposable {
         registryManager.addSerializerRegistry("weapons", new WeaponRecord.WeaponSerializer());
 
         this.pluginLoader = new PluginLoader(TGL.getEngineFolder("plugins"), registryManager);
+        this.modLoader = new ModLoader(TGL.getEngineFolder("mods"), registryManager, vfs);
     }
 
     public void run() {
@@ -92,7 +95,7 @@ public class TGLEngine implements IDisposable {
         pluginLoader.loadPlugins();
 
         // Initialize Mod Loader
-        //modLoader.loadMods();
+        modLoader.loadMods();
 
         // Post Initialize Plugin Loader
         pluginLoader.postInitializePlugins();

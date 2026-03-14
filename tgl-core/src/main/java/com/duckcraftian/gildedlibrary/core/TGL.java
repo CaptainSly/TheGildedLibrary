@@ -16,7 +16,7 @@ public class TGL {
     }
 
     // File Constants
-    public static final String ENGINE_FOLDER = "tgl/";
+    public static final String ENGINE_FOLDER = "gildedlibrary/";
     public static final String[] ENGINE_FOLDERS = {
             "data", "config", "saves", "libs", "mods", "plugins"
     };

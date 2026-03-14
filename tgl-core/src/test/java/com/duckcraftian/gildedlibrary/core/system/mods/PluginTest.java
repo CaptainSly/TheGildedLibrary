@@ -1,5 +1,6 @@
 package com.duckcraftian.gildedlibrary.core.system.mods;
 
+import com.duckcraftian.gildedlibrary.api.system.mods.CircularDependencyException;
 import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,11 @@ public class PluginTest {
         RegistryManager registryManager = new RegistryManager();
         PluginLoader loader = new PluginLoader(pluginDir, registryManager);
 
-        loader.loadPlugins();
+        try {
+            loader.loadPlugins();
+        } catch (CircularDependencyException e) {
+            throw new RuntimeException(e);
+        }
 
         assertTrue(loader.getLoadedPlugins().containsKey("test_plugin"));
         assertTrue(registryManager.containsRecordRegistry("holotapes"));

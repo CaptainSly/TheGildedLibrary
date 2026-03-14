@@ -118,6 +118,7 @@ public abstract class GLArchiveReader implements Closeable {
         return (ArchiveIndexTable<GLARecordEntry>) indexTables.get("record");
     }
 
+
     public Optional<ModMetadata> getMetadata() {
         return Optional.ofNullable(metadata);
     }

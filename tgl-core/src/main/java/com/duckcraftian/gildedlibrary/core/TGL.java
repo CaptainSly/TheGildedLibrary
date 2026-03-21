@@ -1,5 +1,7 @@
 package com.duckcraftian.gildedlibrary.core;
 
+import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,5 +36,8 @@ public class TGL {
     public static Path getEngineFolder(String path) {
         return Path.of(ENGINE_PATH.toString(), path);
     }
+
+    // Registry Manager
+    public static RegistryManager REGISTRY_MANAGER;
 
 }

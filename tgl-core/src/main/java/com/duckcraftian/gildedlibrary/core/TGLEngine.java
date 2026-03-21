@@ -1,40 +1,39 @@
 package com.duckcraftian.gildedlibrary.core;
 
-import com.duckcraftian.gildedlibrary.api.assets.RenderBackend;
 import com.duckcraftian.gildedlibrary.api.system.Builder;
 import com.duckcraftian.gildedlibrary.api.system.IDisposable;
-import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
+import com.duckcraftian.gildedlibrary.api.system.engine.EngineMode;
+import com.duckcraftian.gildedlibrary.api.system.engine.IEngine;
+import com.duckcraftian.gildedlibrary.api.system.engine.IEngineContext;
+import com.duckcraftian.gildedlibrary.api.system.engine.SubsystemType;
+import com.duckcraftian.gildedlibrary.api.system.event.EventBus;
+import com.duckcraftian.gildedlibrary.api.system.event.RegisteredListener;
+import com.duckcraftian.gildedlibrary.api.system.gfx.RenderBackend;
+import com.duckcraftian.gildedlibrary.api.system.gfx.WindowBackend;
 import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
-import com.duckcraftian.gildedlibrary.core.system.EngineMode;
-import com.duckcraftian.gildedlibrary.core.system.Game;
+import com.duckcraftian.gildedlibrary.api.system.vfs.IVFS;
 import com.duckcraftian.gildedlibrary.core.system.mods.ModLoader;
-import com.duckcraftian.gildedlibrary.core.system.render.Window;
 import com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader;
 import com.duckcraftian.gildedlibrary.core.system.records.ItemRecord;
 import com.duckcraftian.gildedlibrary.core.system.records.WeaponRecord;
-import com.duckcraftian.gildedlibrary.core.system.render.GLBackend;
 import com.duckcraftian.gildedlibrary.core.system.vfs.VirtualFileSystem;
-import org.lwjgl.sdl.*;
 import org.tinylog.Logger;
 
 import java.io.IOException;
 
-import static org.lwjgl.sdl.SDLInit.SDL_INIT_VIDEO;
-import static org.lwjgl.sdl.SDLInit.SDL_Init;
+public class TGLEngine implements IEngine, IDisposable {
 
-public class TGLEngine implements IDisposable {
+    private final EngineMode engineMode;
+    private final RegistryManager registryManager;
+    private final VirtualFileSystem vfs;
+    private final PluginLoader pluginLoader;
+    private final ModLoader modLoader;
+    private final EventBus eventBus;
+    private final WindowBackend windowBackend;
 
-    private EngineMode engineMode;
-    private RegistryManager registryManager;
-    private VirtualFileSystem vfs;
-    private PluginLoader pluginLoader;
-    private ModLoader modLoader;
-    private Window window;
-
-    private RenderBackend renderBackend;
-
-    private Game game;
+    private final RenderBackend renderBackend;
+    private final IEngineContext engineContext;
 
     private boolean isRunning = false;
 
@@ -43,27 +42,35 @@ public class TGLEngine implements IDisposable {
             TGL.createDataFolder();
         }
 
-        this.engineMode = builder.engineMode;
+        this.engineContext = builder.engineContext;
+        this.engineMode = this.engineContext.getMode();
+        this.windowBackend = builder.windowBackend;
         this.renderBackend = builder.renderBackend;
 
         this.registryManager = new RegistryManager();
+        TGL.REGISTRY_MANAGER = registryManager;
+
         this.vfs = new VirtualFileSystem();
-        this.game = new Game();
+        this.eventBus = new EventBus();
 
         // Create the default registries
         registryManager.addRecordRegistry("items", new RecordRegistry<ItemRecord>("items"));
         registryManager.addRecordRegistry("weapons", new RecordRegistry<WeaponRecord>("weapons"));
 
         // TODO Replace `AbstractRecord` with the appropriate concrete Record type
-        registryManager.addRecordRegistry("armors", new RecordRegistry<AbstractRecord>("armors"));
-        registryManager.addRecordRegistry("races", new RecordRegistry<AbstractRecord>("races"));
-        registryManager.addRecordRegistry("npcs", new RecordRegistry<AbstractRecord>("npcs"));
-        registryManager.addRecordRegistry("creatures", new RecordRegistry<AbstractRecord>("creatures"));
-        registryManager.addRecordRegistry("quests", new RecordRegistry<AbstractRecord>("quests"));
-        registryManager.addRecordRegistry("dialogue", new RecordRegistry<AbstractRecord>("dialogue"));
-        registryManager.addRecordRegistry("factions", new RecordRegistry<AbstractRecord>("factions"));
-        registryManager.addRecordRegistry("weather", new RecordRegistry<AbstractRecord>("weather"));
-        registryManager.addRecordRegistry("cells", new RecordRegistry<AbstractRecord>("cells"));
+        registryManager.addRecordRegistry("armors", new RecordRegistry<>("armors"));
+        registryManager.addRecordRegistry("clothing", new RecordRegistry<>("clothing"));
+        registryManager.addRecordRegistry("races", new RecordRegistry<>("races"));
+        registryManager.addRecordRegistry("npcs", new RecordRegistry<>("npcs"));
+        registryManager.addRecordRegistry("creatures", new RecordRegistry<>("creatures"));
+        registryManager.addRecordRegistry("quests", new RecordRegistry<>("quests"));
+        registryManager.addRecordRegistry("dialogue", new RecordRegistry<>("dialogue"));
+        registryManager.addRecordRegistry("factions", new RecordRegistry<>("factions"));
+        registryManager.addRecordRegistry("skills", new RecordRegistry<>("skills"));
+        registryManager.addRecordRegistry("attributes", new RecordRegistry<>("attributes"));
+        registryManager.addRecordRegistry("abilities", new RecordRegistry<>("abilities"));
+        registryManager.addRecordRegistry("containers", new RecordRegistry<>("containers"));
+
 
         // TODO Add the other Serializers when they're created
         registryManager.addSerializerRegistry("items", new ItemRecord.ItemSerializer());
@@ -75,21 +82,22 @@ public class TGLEngine implements IDisposable {
 
     public void run() {
         init();
-        loop();
 
-        onDispose();
+        if (engineMode.hasGameLoop())
+            loop();
+
+        onShutdown();
     }
 
     private void init() {
-        // Initialize SDL3
-        if (!SDL_Init(SDL_INIT_VIDEO))
-            throw new RuntimeException("SDL3 could not initialize! SDL_ERROR: " + SDLError.SDL_GetError());
 
-        window = new Window("The Gilded Library", 1280, 720);
-        renderBackend.setWindow(window.getAddress());
 
-        // Initialize Render Backend
-        renderBackend.onInitialize();
+        if (engineMode.requires(SubsystemType.RENDERING)) {
+            // Initialize Render Backend
+            windowBackend.onInitialize();
+            renderBackend.setWindow(windowBackend.getWindowPointer());
+            renderBackend.onInitialize();
+        }
 
         // Initialize Plugin Loader
         pluginLoader.loadPlugins();
@@ -100,10 +108,10 @@ public class TGLEngine implements IDisposable {
         // Post Initialize Plugin Loader
         pluginLoader.postInitializePlugins();
 
-        game.onInitialize();
+        engineContext.onEngineReady(this);
     }
 
-    private void loop() {
+    public void loop() {
         isRunning = true;
 
         long previousTime = System.nanoTime();
@@ -113,34 +121,31 @@ public class TGLEngine implements IDisposable {
             previousTime = currentTime;
 
             // Handle Events
-            handleEvents();
+            if (engineMode.requires(SubsystemType.RENDERING) && engineMode.requires(SubsystemType.INPUT))
+                windowBackend.handleEvents(this);
 
             // Update
-            game.update(delta);
+            engineContext.onUpdate(delta);
 
             // Render
-            renderBackend.clearScreen();
-            game.render();
-            renderBackend.swapBuffers();
+            if (engineMode.requires(SubsystemType.RENDERING)) {
+                renderBackend.clearScreen();
+                engineContext.onRender();
+                renderBackend.swapBuffers();
+            }
         }
 
     }
 
-    private void handleEvents() {
+    @Override
+    public void shouldShutdown() {
+        isRunning = false;
+    }
 
-        SDL_Event event = SDL_Event.malloc();
-        while (SDLEvents.SDL_PollEvent(event)) {
-
-            if (event.type() == SDLEvents.SDL_EVENT_QUIT)
-                isRunning = false;
-
-            // Map Input
-
-            // Map Controllers
-
-
-        }
-        event.free();
+    @Override
+    public void onShutdown() {
+        engineContext.onShutdown();
+        onDispose();
     }
 
     @Override
@@ -157,23 +162,31 @@ public class TGLEngine implements IDisposable {
             }
         });
 
-        renderBackend.onDispose();
-        window.onDispose();
-        SDLInit.SDL_Quit();
+        if (engineMode.requires(SubsystemType.RENDERING))
+            renderBackend.onDispose();
+
+        if (engineMode.hasGameLoop() && engineMode.requires(SubsystemType.RENDERING))
+            windowBackend.onDispose();
     }
 
     public static class EngineBuilder extends Builder<EngineBuilder, TGLEngine> {
 
-        private EngineMode engineMode;
         private RenderBackend renderBackend;
+        private WindowBackend windowBackend;
+        private IEngineContext engineContext;
 
-        public EngineBuilder engineMode(EngineMode engineMode) {
-            this.engineMode = engineMode;
+        public EngineBuilder engineContext(IEngineContext engineContext) {
+            this.engineContext = engineContext;
             return self();
         }
 
         public EngineBuilder renderBackend(RenderBackend renderBackend) {
             this.renderBackend = renderBackend;
+            return self();
+        }
+
+        public EngineBuilder windowBackend(WindowBackend windowBackend) {
+            this.windowBackend = windowBackend;
             return self();
         }
 
@@ -188,13 +201,43 @@ public class TGLEngine implements IDisposable {
         }
     }
 
-    static void main(String[] args) {
-        TGLEngine e = new EngineBuilder()
-                .engineMode(EngineMode.GAME)
-                .renderBackend(new GLBackend())
-                .build();
-
-        e.run();
+    @Override
+    public EngineMode getMode() {
+        return engineMode;
     }
 
+    @Override
+    public RegistryManager getRegistryManager() {
+        return registryManager;
+    }
+
+    public IVFS getVFS() {
+        return vfs;
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public PluginLoader getPluginLoader() {
+        return pluginLoader;
+    }
+
+    public ModLoader getModLoader() {
+        return modLoader;
+    }
+
+    public WindowBackend getWindowBackend() {
+        return windowBackend;
+    }
+
+    @Override
+    public RenderBackend getRenderBackend() {
+        return renderBackend;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
 }

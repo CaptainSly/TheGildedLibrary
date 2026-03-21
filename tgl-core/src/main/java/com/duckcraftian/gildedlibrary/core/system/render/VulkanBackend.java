@@ -1,13 +1,11 @@
 package com.duckcraftian.gildedlibrary.core.system.render;
 
-import com.duckcraftian.gildedlibrary.api.assets.RenderBackend;
+import com.duckcraftian.gildedlibrary.api.system.gfx.RenderBackend;
 import com.duckcraftian.gildedlibrary.core.TGL;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.sdl.SDLVulkan;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.vulkan.*;
-
-import java.util.Set;
 
 public class VulkanBackend extends RenderBackend {
 

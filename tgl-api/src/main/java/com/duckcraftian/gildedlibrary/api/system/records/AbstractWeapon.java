@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public abstract class AbstractWeapon extends AbstractItem {
+public abstract class AbstractWeapon extends AbstractEquipment {
 
     private final String weaponType;
     private final float attackPower;
@@ -43,7 +43,7 @@ public abstract class AbstractWeapon extends AbstractItem {
         builder.critChance(this.critChance);
     }
 
-    public static abstract class AbstractWeaponBuilder<T extends AbstractWeaponBuilder<T, R>, R extends AbstractWeapon> extends AbstractItemBuilder<T, R> {
+    public static abstract class AbstractWeaponBuilder<T extends AbstractWeaponBuilder<T, R>, R extends AbstractWeapon> extends AbstractEquipmentBuilder<T, R> {
         private String weaponType;
         private float attackPower;
         private float speedCost;
@@ -70,7 +70,7 @@ public abstract class AbstractWeapon extends AbstractItem {
         }
     }
 
-    public static abstract class AbstractWeaponSerializer<R extends AbstractWeapon> extends AbstractItemSerializer<R> {
+    public static abstract class AbstractWeaponSerializer<R extends AbstractWeapon> extends AbstractEquipmentSerializer<R> {
         @Override
         public byte[] write(R record) {
             byte[] recordBytes;

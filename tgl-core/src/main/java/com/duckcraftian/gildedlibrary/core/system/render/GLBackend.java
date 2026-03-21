@@ -1,6 +1,7 @@
 package com.duckcraftian.gildedlibrary.core.system.render;
 
-import com.duckcraftian.gildedlibrary.api.assets.RenderBackend;
+import com.duckcraftian.gildedlibrary.api.system.gfx.RenderBackend;
+import com.duckcraftian.gildedlibrary.api.system.Pointer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.sdl.SDLVideo;
@@ -8,6 +9,9 @@ import org.lwjgl.sdl.SDLVideo;
 public class GLBackend extends RenderBackend {
 
     private long openGLContext;
+
+    public GLBackend() {
+    }
 
     @Override
     public void onInitialize() {

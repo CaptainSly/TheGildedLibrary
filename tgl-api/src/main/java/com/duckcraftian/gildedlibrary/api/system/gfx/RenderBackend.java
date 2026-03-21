@@ -1,4 +1,4 @@
-package com.duckcraftian.gildedlibrary.api.assets;
+package com.duckcraftian.gildedlibrary.api.system.gfx;
 
 import com.duckcraftian.gildedlibrary.api.system.IDisposable;
 import com.duckcraftian.gildedlibrary.api.system.Pointer;

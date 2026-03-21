@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class ItemRecord extends AbstractItem {
 
-
     protected ItemRecord(ItemBuilder builder) {
         super(builder);
     }

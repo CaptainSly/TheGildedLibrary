@@ -9,6 +9,7 @@ val lwjglVersion = "3.4.1"
 val jomlVersion = "1.10.8"
 val lwjglNatives = "natives-linux"
 val tinylogVersion = "2.7.0"
+val nettyVersion = "4.2.10.Final"
 
 dependencies {
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
@@ -18,4 +19,5 @@ dependencies {
     implementation("org.joml", "joml", jomlVersion)
 
     implementation("org.tinylog:tinylog-api:$tinylogVersion")
+    implementation("io.netty:netty-all:$nettyVersion")
 }

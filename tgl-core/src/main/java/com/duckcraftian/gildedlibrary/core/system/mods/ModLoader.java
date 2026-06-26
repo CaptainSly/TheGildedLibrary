@@ -110,6 +110,7 @@ public class ModLoader {
                     if (registry.isEmpty())
                         throw new MissingRegistryException("Registry: " + recordType + " does not exist. This is a FATAL PROBLEM");
 
+                    //noinspection rawtypes
                     ((RecordRegistry) registry.get()).addRecord(record.get());
                 }
             }

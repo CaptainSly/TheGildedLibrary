@@ -58,13 +58,21 @@ public class PluginLoader {
 
             PluginContext context = new PluginContext(registryManager, pluginId);
 
-            plugin.onInitialize(context);
+            plugin.onPreInitialize(context);
             plugin.onEnable();
 
             registryManager.getLoadedPlugins().add(meta.id());
             Logger.info("Loaded plugin: " + meta.name() + " v" + meta.version());
         }
 
+    }
+
+    public void initializePlugins() {
+        for (String pluginId : loadOrder) {
+            IPlugin plugin = loadedPlugins.get(pluginId);
+            plugin.onInitialize();
+            Logger.info("Initialize Plugin: " + pluginId);
+        }
     }
 
     public void postInitializePlugins() {

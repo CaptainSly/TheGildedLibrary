@@ -3,7 +3,6 @@ package com.duckcraftian.gildedlibrary.core.system.event;
 import com.duckcraftian.gildedlibrary.api.system.event.EventBus;
 import com.duckcraftian.gildedlibrary.api.system.event.EventListener;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.List;

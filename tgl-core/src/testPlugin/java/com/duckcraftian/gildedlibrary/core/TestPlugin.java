@@ -1,5 +1,6 @@
 package com.duckcraftian.gildedlibrary.core;
 
+import com.duckcraftian.gildedlibrary.api.system.editor.EditorContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.IPlugin;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.PluginContext;
 import com.duckcraftian.gildedlibrary.api.system.mods.plugins.TGLPlugin;
@@ -20,9 +21,15 @@ public class TestPlugin implements IPlugin {
     public boolean initialized = false;
     public boolean enabled = false;
 
-    @Override
-    public void onInitialize(PluginContext context) {
+    private PluginContext context;
 
+    @Override
+    public void onPreInitialize(PluginContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public void onInitialize() {
         context.registryManager().addRecordRegistry("holotapes", new RecordRegistry<HolotapeRecord>("holotapes"));
         HolotapeRecord testTape = new HolotapeRecord.HolotapeBuilder()
                 .modId(MOD_ID)
@@ -37,6 +44,21 @@ public class TestPlugin implements IPlugin {
     }
 
     public void onPostInitialize() {
+
+    }
+
+    @Override
+    public void onEditorPreInitialize(EditorContext context) {
+
+    }
+
+    @Override
+    public void onEditorInitialize() {
+
+    }
+
+    @Override
+    public void onEditorPostInitialize() {
 
     }
 

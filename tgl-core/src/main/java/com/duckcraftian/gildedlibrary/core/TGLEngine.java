@@ -7,7 +7,6 @@ import com.duckcraftian.gildedlibrary.api.system.engine.IEngine;
 import com.duckcraftian.gildedlibrary.api.system.engine.IEngineContext;
 import com.duckcraftian.gildedlibrary.api.system.engine.SubsystemType;
 import com.duckcraftian.gildedlibrary.api.system.event.EventBus;
-import com.duckcraftian.gildedlibrary.api.system.event.RegisteredListener;
 import com.duckcraftian.gildedlibrary.api.system.gfx.RenderBackend;
 import com.duckcraftian.gildedlibrary.api.system.gfx.WindowBackend;
 import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
@@ -15,8 +14,7 @@ import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.api.system.vfs.IVFS;
 import com.duckcraftian.gildedlibrary.core.system.mods.ModLoader;
 import com.duckcraftian.gildedlibrary.core.system.mods.PluginLoader;
-import com.duckcraftian.gildedlibrary.core.system.records.ItemRecord;
-import com.duckcraftian.gildedlibrary.core.system.records.WeaponRecord;
+import com.duckcraftian.gildedlibrary.core.system.records.*;
 import com.duckcraftian.gildedlibrary.core.system.vfs.VirtualFileSystem;
 import org.tinylog.Logger;
 
@@ -56,6 +54,9 @@ public class TGLEngine implements IEngine, IDisposable {
         // Create the default registries
         registryManager.addRecordRegistry("items", new RecordRegistry<ItemRecord>("items"));
         registryManager.addRecordRegistry("weapons", new RecordRegistry<WeaponRecord>("weapons"));
+        registryManager.addRecordRegistry("ranged_weapons", new RecordRegistry<RangedWeaponRecord>("ranged_weapons"));
+        registryManager.addRecordRegistry("skills", new RecordRegistry<SkillRecord>("skills"));
+        registryManager.addRecordRegistry("attributes", new RecordRegistry<AttributeRecord>("attributes"));
 
         // TODO Replace `AbstractRecord` with the appropriate concrete Record type
         registryManager.addRecordRegistry("armors", new RecordRegistry<>("armors"));
@@ -66,8 +67,6 @@ public class TGLEngine implements IEngine, IDisposable {
         registryManager.addRecordRegistry("quests", new RecordRegistry<>("quests"));
         registryManager.addRecordRegistry("dialogue", new RecordRegistry<>("dialogue"));
         registryManager.addRecordRegistry("factions", new RecordRegistry<>("factions"));
-        registryManager.addRecordRegistry("skills", new RecordRegistry<>("skills"));
-        registryManager.addRecordRegistry("attributes", new RecordRegistry<>("attributes"));
         registryManager.addRecordRegistry("abilities", new RecordRegistry<>("abilities"));
         registryManager.addRecordRegistry("containers", new RecordRegistry<>("containers"));
 
@@ -75,6 +74,9 @@ public class TGLEngine implements IEngine, IDisposable {
         // TODO Add the other Serializers when they're created
         registryManager.addSerializerRegistry("items", new ItemRecord.ItemSerializer());
         registryManager.addSerializerRegistry("weapons", new WeaponRecord.WeaponSerializer());
+        registryManager.addSerializerRegistry("ranged_weapons", new RangedWeaponRecord.RangedWeaponSerializer());
+        registryManager.addSerializerRegistry("attributes", new AttributeRecord.AttributeSerializer());
+        registryManager.addSerializerRegistry("skills", new SkillRecord.SkillRecordSerializer());
 
         this.pluginLoader = new PluginLoader(TGL.getEngineFolder("plugins"), registryManager);
         this.modLoader = new ModLoader(TGL.getEngineFolder("mods"), registryManager, vfs);
@@ -92,6 +94,9 @@ public class TGLEngine implements IEngine, IDisposable {
     private void init() {
 
 
+        // Pre Initialize Plugins
+        pluginLoader.loadPlugins();
+
         if (engineMode.requires(SubsystemType.RENDERING)) {
             // Initialize Render Backend
             windowBackend.onInitialize();
@@ -99,8 +104,8 @@ public class TGLEngine implements IEngine, IDisposable {
             renderBackend.onInitialize();
         }
 
-        // Initialize Plugin Loader
-        pluginLoader.loadPlugins();
+        // Initialize Plugins
+        pluginLoader.initializePlugins();
 
         // Initialize Mod Loader
         modLoader.loadMods();

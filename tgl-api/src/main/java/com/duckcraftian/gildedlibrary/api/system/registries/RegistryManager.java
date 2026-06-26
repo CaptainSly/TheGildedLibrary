@@ -148,8 +148,7 @@ public class RegistryManager {
     }
 
     public Map<String, RecordRegistry<?>> copyRegistries() {
-        Map<String, RecordRegistry<?>> copy = new HashMap<>();
-        copy.putAll(recordRegistries);
+        Map<String, RecordRegistry<?>> copy = new HashMap<>(recordRegistries);
         return copy;
     }
 

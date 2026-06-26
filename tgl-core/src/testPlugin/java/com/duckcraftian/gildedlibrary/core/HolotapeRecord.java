@@ -26,8 +26,7 @@ public class HolotapeRecord extends AbstractItem {
 
         public HolotapeBuilder data(String... data) {
             this.data = new String[data.length];
-            for (int i = 0; i < data.length; i++)
-                this.data[i] = data[i];
+            System.arraycopy(data, 0, this.data, 0, data.length);
 
             return self();
         }

@@ -22,6 +22,8 @@ public abstract class AbstractItem extends AbstractRecord {
     private final float weight;
     private final float cost;
 
+    private final boolean questItem;
+
     protected AbstractItem(AbstractItemBuilder<?, ?> builder) {
         super(builder);
         this.name = builder.name;
@@ -32,6 +34,7 @@ public abstract class AbstractItem extends AbstractRecord {
         this.rarity = builder.rarity;
         this.weight = builder.weight;
         this.cost = builder.cost;
+        this.questItem = builder.questItem;
     }
 
     public String getName() {
@@ -66,6 +69,10 @@ public abstract class AbstractItem extends AbstractRecord {
         return cost;
     }
 
+    public boolean isQuestItem() {
+        return questItem;
+    }
+
     protected void fillBuilder(AbstractItemBuilder<?, ?> builder) {
         super.fillBuilder(builder);
         builder.name(this.name);
@@ -75,6 +82,7 @@ public abstract class AbstractItem extends AbstractRecord {
         builder.rarity(this.rarity);
         builder.weight(this.weight);
         builder.cost(this.cost);
+        builder.questItem(this.questItem);
 
         var scriptPresent = this.script.isPresent();
         if (scriptPresent) {
@@ -91,8 +99,15 @@ public abstract class AbstractItem extends AbstractRecord {
         private String model;
         private String script;
         private String rarity;
+
         private float weight;
         private float cost;
+
+        private boolean questItem;
+
+        public AbstractItemBuilder() {
+            this.recordType("items");
+        }
 
         public T script(String script) {
             this.script = script;
@@ -134,6 +149,11 @@ public abstract class AbstractItem extends AbstractRecord {
             return self();
         }
 
+        public T questItem(boolean questItem) {
+            this.questItem = questItem;
+            return self();
+        }
+
     }
 
     public abstract static class AbstractItemSerializer<R extends AbstractItem> extends RecordSerializer<R> {
@@ -158,8 +178,12 @@ public abstract class AbstractItem extends AbstractRecord {
                     bos.write(0);
 
                 writeString(bos, record.getRarity());
+
                 writeFloat(bos, record.getWeight());
                 writeFloat(bos, record.getCost());
+
+                bos.write(record.isQuestItem() ? 1 : 0);
+
                 recordBytes = bos.toByteArray();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -175,10 +199,16 @@ public abstract class AbstractItem extends AbstractRecord {
             String model = getString(bis);
             String script = bis.read() == 1 ? getString(bis) : null;
             String rarity = getString(bis);
+
             Float weight = getFloat(bis);
             Float cost = getFloat(bis);
 
-            builder.name(name).description(description).image(image).model(model).script(script).rarity(rarity).weight(weight).cost(cost);
+            int questItemBit = bis.read();
+            boolean isQuestItem = false;
+            if (questItemBit > 0)
+                isQuestItem = true;
+
+            builder.name(name).description(description).image(image).model(model).script(script).rarity(rarity).weight(weight).cost(cost).questItem(isQuestItem);
         }
     }
 

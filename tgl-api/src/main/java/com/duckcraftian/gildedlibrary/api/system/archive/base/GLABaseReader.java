@@ -2,7 +2,6 @@ package com.duckcraftian.gildedlibrary.api.system.archive.base;
 
 import com.duckcraftian.gildedlibrary.api.system.archive.*;
 import com.duckcraftian.gildedlibrary.api.system.archive.asset.GLAAssetEntry;
-import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadata;
 import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.api.system.serialization.AbstractRecordSerializer;

@@ -20,6 +20,8 @@ public class PluginTest {
 
         try {
             loader.loadPlugins();
+            loader.initializePlugins();
+            loader.postInitializePlugins();
         } catch (CircularDependencyException e) {
             throw new RuntimeException(e);
         }

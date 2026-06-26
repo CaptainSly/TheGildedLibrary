@@ -50,6 +50,22 @@ public abstract class AbstractRecordSerializer<R extends AbstractRecord> {
         bos.write(floatBytes);
     }
 
+    protected void write(ByteArrayOutputStream bos, int value) throws IOException {
+        bos.write(value);
+    }
+
+    protected void writeBoolean(ByteArrayOutputStream bos, boolean value) throws IOException {
+        bos.write(value ? 1 : 0);
+    }
+
+    protected boolean getBoolean(ByteArrayInputStream bin) throws IOException {
+        return bin.read() == 1 ? true : false;
+    }
+
+    protected int get(ByteArrayInputStream bin) throws IOException {
+        return bin.read();
+    }
+
     protected String getString(ByteArrayInputStream bin) throws IOException {
         byte[] lengthBytes = new byte[4];
         var _ = bin.read(lengthBytes);

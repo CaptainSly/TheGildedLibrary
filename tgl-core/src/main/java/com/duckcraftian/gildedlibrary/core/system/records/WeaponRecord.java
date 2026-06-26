@@ -20,10 +20,6 @@ public class WeaponRecord extends AbstractWeapon {
 
     public static class WeaponBuilder extends AbstractWeaponBuilder<WeaponBuilder, WeaponRecord> {
 
-        public WeaponBuilder() {
-            this.recordType("weapons");
-        }
-
         @Override
         public WeaponBuilder self() {
             return this;

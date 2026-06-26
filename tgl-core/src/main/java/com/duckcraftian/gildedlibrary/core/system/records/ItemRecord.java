@@ -20,10 +20,6 @@ public class ItemRecord extends AbstractItem {
 
     public static class ItemBuilder extends AbstractItem.AbstractItemBuilder<ItemRecord.ItemBuilder, ItemRecord> {
 
-        public ItemBuilder() {
-            this.recordType("items");
-        }
-
         @Override
         public ItemBuilder self() {
             return this;

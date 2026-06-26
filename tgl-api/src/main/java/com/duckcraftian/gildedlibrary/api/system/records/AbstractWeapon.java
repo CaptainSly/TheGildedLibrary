@@ -49,6 +49,10 @@ public abstract class AbstractWeapon extends AbstractEquipment {
         private float speedCost;
         private float critChance;
 
+        public AbstractWeaponBuilder() {
+            this.recordType("weapons");
+        }
+
         public T weaponType(String weaponType) {
             this.weaponType = weaponType;
             return self();

@@ -3,7 +3,9 @@ package com.duckcraftian.gildedlibrary.core.system.mods;
 import com.duckcraftian.gildedlibrary.api.system.archive.asset.GLAAssetWriter;
 import com.duckcraftian.gildedlibrary.api.system.archive.base.GLABaseWriter;
 import com.duckcraftian.gildedlibrary.api.system.archive.mod.GLAModWriter;
-import com.duckcraftian.gildedlibrary.api.system.mods.*;
+import com.duckcraftian.gildedlibrary.api.system.mods.MissingDependencyException;
+import com.duckcraftian.gildedlibrary.api.system.mods.ModConflictException;
+import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadata;
 import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 import com.duckcraftian.gildedlibrary.core.TGL;
@@ -12,14 +14,14 @@ import com.duckcraftian.gildedlibrary.core.system.vfs.VirtualFileSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ModLoaderTest {
 

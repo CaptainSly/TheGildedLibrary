@@ -1,8 +1,5 @@
 package com.duckcraftian.gildedlibrary.api.system;
 
-import com.duckcraftian.gildedlibrary.api.assets.AbstractAsset;
-import com.duckcraftian.gildedlibrary.api.assets.AssetType;
-
 /**
  * Abstract base class for type-safe builders using the template pattern (CRTP).
  *

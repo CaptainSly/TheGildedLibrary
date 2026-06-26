@@ -1,11 +1,5 @@
 package com.duckcraftian.gildedlibrary.api.system.vfs;
 
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 public abstract class AbstractVFSMount implements IVFSMount {
 
     private final String modId;

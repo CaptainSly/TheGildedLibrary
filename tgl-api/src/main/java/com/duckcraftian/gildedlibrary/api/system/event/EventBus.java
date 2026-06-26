@@ -15,7 +15,7 @@ public class EventBus {
     }
 
     public <E extends Event> void subscribe(Class<E> eventClass, EventListener<E> listener, int priority, boolean ignoreCancelled) {
-        List<RegisteredListener> registeredListeners = listeners.computeIfAbsent(eventClass, k -> new CopyOnWriteArrayList<RegisteredListener>());
+        List<RegisteredListener> registeredListeners = listeners.computeIfAbsent(eventClass, k -> new CopyOnWriteArrayList<>());
         RegisteredListener regListener = new RegisteredListener(priority, listener, ignoreCancelled);
         registeredListeners.add(regListener);
         registeredListeners.sort(Comparator.comparingInt(RegisteredListener::priority).reversed());
@@ -32,9 +32,7 @@ public class EventBus {
     public void fire(Event event) {
         List<RegisteredListener> registeredListeners = listeners.getOrDefault(event.getClass(), new CopyOnWriteArrayList<>());
         for (RegisteredListener listener : registeredListeners) {
-            if (event instanceof CancellableEvent cancellableEvent && cancellableEvent.isCancelled() && listener.ignoreCancelled() == false)
-                continue;
-            else
+            if (!(event instanceof CancellableEvent cancellableEvent && cancellableEvent.isCancelled() && listener.ignoreCancelled() == false))
                 ((EventListener<Event>) listener.listener()).onEvent(event);
         }
     }

@@ -4,7 +4,6 @@ import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class TGL {
 

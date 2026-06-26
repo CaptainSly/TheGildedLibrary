@@ -3,9 +3,7 @@ package com.duckcraftian.gildedlibrary.api.system.archive;
 import com.duckcraftian.gildedlibrary.api.system.archive.asset.GLAAssetEntry;
 import com.duckcraftian.gildedlibrary.api.system.mods.ModMetadata;
 import com.duckcraftian.gildedlibrary.api.system.records.AbstractRecord;
-import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
-import com.duckcraftian.gildedlibrary.api.system.serialization.AbstractRecordSerializer;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -14,7 +12,9 @@ import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public abstract class GLArchiveReader implements Closeable {
 

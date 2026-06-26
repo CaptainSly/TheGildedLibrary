@@ -6,7 +6,6 @@ import com.duckcraftian.gildedlibrary.api.system.serialization.AbstractRecordSer
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 public abstract class AbstractRecord implements IRecord {
@@ -130,8 +129,10 @@ public abstract class AbstractRecord implements IRecord {
                     .itemId(id)
                     .editorId(editorId)
                     .modId(modId)
-                    .recordType(recordType)
-                    .parentId(parentId);
+                    .recordType(recordType);
+
+            if (!parentId.isEmpty())
+                builder.parentId(parentId);
         }
 
     }

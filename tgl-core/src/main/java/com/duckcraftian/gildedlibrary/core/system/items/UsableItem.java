@@ -2,6 +2,7 @@ package com.duckcraftian.gildedlibrary.core.system.items;
 
 import com.duckcraftian.gildedlibrary.api.assets.AbstractScriptAsset;
 import com.duckcraftian.gildedlibrary.api.system.items.IUsable;
+import com.duckcraftian.gildedlibrary.api.system.records.AbstractItem;
 import com.duckcraftian.gildedlibrary.api.system.registries.AssetRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RecordRegistry;
 import com.duckcraftian.gildedlibrary.api.system.registries.RegistryManager;
@@ -19,13 +20,7 @@ public class UsableItem extends Item implements IUsable {
     public void onUse() {
         // Get the Record
         itemRecord.resolve((RecordRegistry<? extends ItemRecord>) TGL.REGISTRY_MANAGER.getDefaultRecordRegistry(RegistryManager.DefaultRecordTypes.ITEMS))
-                .flatMap(record -> {
-                    return record.getScript();
-                }).flatMap(script -> {
-                    return script.resolve((AssetRegistry<? extends AbstractScriptAsset>) TGL.REGISTRY_MANAGER.getDefaultAssetRegistry(RegistryManager.DefaultAssetTypes.SCRIPT));
-                }).ifPresent(script -> {
-                    script.executeFunction("onUse");
-                });
+                .flatMap(AbstractItem::getScript).flatMap(script -> script.resolve((AssetRegistry<? extends AbstractScriptAsset>) TGL.REGISTRY_MANAGER.getDefaultAssetRegistry(RegistryManager.DefaultAssetTypes.SCRIPT))).ifPresent(script -> script.executeFunction("onUse"));
 
     }
 }

@@ -1,5 +1,6 @@
 package com.duckcraftian.gildedlibrary.api.system.engine;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,8 +40,7 @@ public enum EngineMode {
         this.hasGameLoop = hasGameLoop;
         allowedSystems = new HashSet<>();
 
-        for (SubsystemType type : types)
-            allowedSystems.add(type);
+        allowedSystems.addAll(Arrays.asList(types));
     }
 
     public boolean requires(SubsystemType type) {

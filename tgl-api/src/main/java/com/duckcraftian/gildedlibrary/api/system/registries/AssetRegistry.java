@@ -1,7 +1,6 @@
 package com.duckcraftian.gildedlibrary.api.system.registries;
 
 import com.duckcraftian.gildedlibrary.api.assets.AbstractAsset;
-import com.duckcraftian.gildedlibrary.api.assets.AssetReference;
 
 import java.util.Collections;
 import java.util.HashMap;

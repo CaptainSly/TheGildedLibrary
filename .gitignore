@@ -19,6 +19,9 @@ Thumbs.db
 # TGL
 docs/
 /gildedlibrary/
+Universes
+Research/*
+readme_docs/*
 
 # Generated
 *.class

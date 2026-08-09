@@ -17,11 +17,21 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@v4
 
+      - name: Download GraalVM CE 25.0.2 (linux-x64)
+        run: |
+          curl -fsSL -o graalvm-ce.tar.gz \
+            https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_linux-x64_bin.tar.gz
+          curl -fsSL -o graalvm-ce.tar.gz.sha256 \
+            https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_linux-x64_bin.tar.gz.sha256
+          echo "$(cat graalvm-ce.tar.gz.sha256)  graalvm-ce.tar.gz" | sha256sum -c -
+
       - name: Set up JDK 25 (GraalVM Community)
         uses: actions/setup-java@v4
         with:
-          distribution: graalvm-community
+          distribution: jdkfile
+          jdkFile: graalvm-ce.tar.gz
           java-version: '25'
+          architecture: x64
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
